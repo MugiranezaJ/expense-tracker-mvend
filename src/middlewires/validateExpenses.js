@@ -25,7 +25,6 @@ export const validateExpenseCreate= (req, res, next) =>{
 export const validateExpenseUpdate= (req, res, next) =>{
     const schema = Joi.object({
         toBeUpdated:Joi.object({
-            // Joi.object({
             name: Joi.string(),
             amount: Joi.number(),
             number: Joi.number()
@@ -38,11 +37,11 @@ export const validateExpenseUpdate= (req, res, next) =>{
 
 export const validateExpenseView= (req, res, next) =>{
     const schema = Joi.object({
-        categoryId: Joi.number().messages({
-            "number.base":"CategoryId must be a number"
+        categoryId: Joi.string().messages({
+            "number.base":"CategoryId must be a string"
         }),
-        id: Joi.number().messages({
-            "number.base":"id must be a number"
+        id: Joi.string().messages({
+            "number.base":"id must be a string"
         }),
     })
   const { error } = schema.validate(req.body);

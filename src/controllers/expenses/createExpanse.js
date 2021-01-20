@@ -1,17 +1,23 @@
-import { con } from "../../config/dbConnection"
+import db from '../../models'
 
-export const createExpense = (req, res) => {
-    const expenseName = req.body.name
-    const categoryId = req.body.categoryId
+export const createExpense = (req, res, next) => {
+    const  number = req.body.number
     const amount = req.body.amount
-    const number = req.body.number
-
-    const sql = `INSERT INTO Expenses(name, amount, number, categoryId) VALUES('${expenseName}', '${amount}', ${number}, '${categoryId}')`
-    con.query(sql, (error, result) => {
-        if (error){
-            res.json({message : error.sqlMessage})
-        }else{
-            res.json({message : `Expense ${expenseName} has been created`})
-        }
-    })
+    const total = amount * number
+    const expense = {
+        name: req.body.name,
+        amount: total, 
+        number: number,
+        categoryId: req.body.categoryId, 
+    }
+    db.Expenses.create(expense)
+        .then(data => {
+            res.status(201).json({message : `Category ${expense.name} created`})
+        })
+        .catch(err => {
+            if(err.parent.errno){
+                res.status(400).json({message: "category id does not exist"})
+            }
+            next(err)
+        })
 }
