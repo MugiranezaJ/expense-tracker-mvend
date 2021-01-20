@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended:false}))
 app.use(router)
 
 app.get('/', (req, res) => {
-    res.json({message : " Welcome to Expense Tracker system "})
+    res.json({message : "Welcome to Expense Tracker system"})
 })
 
 con.connect(function(err) {
