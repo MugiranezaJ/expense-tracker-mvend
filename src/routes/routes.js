@@ -7,21 +7,26 @@ import { createExpense } from '../controllers/expenses/createExpanse'
 import { viewExpense } from '../controllers/expenses/viewExpense'
 import { updateExpense } from '../controllers/expenses/updateExpense'
 import { deleteExpense } from '../controllers/expenses/deleteExpense'
+import { validateSignup } from '../middlewires/validateSignup'
 import { validateExpenseCreate, validateExpenseUpdate, validateExpenseView } from '../middlewires/validateExpenses'
 import { validateCategoryCreate, validateCategoryUpdate } from '../middlewires/validateCategories'
+import authanticate from '../helper/authanticate'
+import { signup } from '../controllers/user/login'
 
 const router = express.Router()
 
-router.post('/expense/category/', validateCategoryCreate, createCategory)
-router.delete('/expense/category/:id', deleteCategory)
-router.patch('/expense/category/:id', validateCategoryUpdate, updateCategory)
-router.get('/expense/category/:id', viewCategories)
-router.get('/expense/category/', viewCategories)
+router.post('/signup', validateSignup, signup)
 
-router.post('/expense/', validateExpenseCreate, createExpense)
-router.get('/expense/:id', validateExpenseView, viewExpense)
-router.get('/expense/', validateExpenseView, viewExpense)
-router.patch('/expense/:id', validateExpenseUpdate, updateExpense)
-router.delete('/expense/:id', deleteExpense)
+router.post('/expense/category/', authanticate, validateCategoryCreate, createCategory)
+router.delete('/expense/category/:id', authanticate, deleteCategory)
+router.patch('/expense/category/:id', authanticate, validateCategoryUpdate, updateCategory)
+router.get('/expense/category/:id', authanticate, viewCategories)
+router.get('/expense/category/', authanticate, viewCategories)
+
+router.post('/expense/', authanticate, validateExpenseCreate, createExpense)
+router.get('/expense/:id', authanticate, validateExpenseView, viewExpense)
+router.get('/expense/', authanticate, validateExpenseView, viewExpense)
+router.patch('/expense/:id', authanticate, validateExpenseUpdate, updateExpense)
+router.delete('/expense/:id', authanticate, deleteExpense)
 
 export default router

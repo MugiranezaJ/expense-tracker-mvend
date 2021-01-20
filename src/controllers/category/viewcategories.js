@@ -1,17 +1,23 @@
 import { mapAmountToCategory } from "../../services/mapAmountToCategory"
-import { con } from "../../config/dbConnection"
+import db from '../../models'
 
 export const viewCategories = (req, res) => {
     const categoryId = req.params.id
-    let sql =''
-    categoryId 
-        ? sql = `SELECT * FROM Categories WHERE id=${categoryId}`
-        : sql =`SELECT * FROM Categories`
-    
-    con.query(sql, async (error, result) => {
-        if(error) throw error
-        categoryId
-        ? res.json(result.length ? result : ({message : "Category not found"}))
-        : mapAmountToCategory(res, result)
-    })
+    let sql ={ id : categoryId}
+    if(categoryId){
+        db.Categories.findAll({where: sql})
+        .then(category => {
+            category.length 
+            ? res.status(200).json(category)
+            : res.status(404).json({message:"No related record found!"})
+        })
+    }else{
+        
+        db.Categories.findAndCountAll()
+        .then(categories => {
+            categories.rows.length
+            ? mapAmountToCategory(res, categories.rows)
+            : res.status(404).json({message:"No record found!"})
+        })
+    }
 }

@@ -1,13 +1,17 @@
 import { con } from "../../config/dbConnection"
+import db from '../../models'
 
-export const deleteExpense = (req, res) => {
+export const deleteExpense = (req, res, next) => {
     const categoryId = req.params.id
-    const sql=`DELETE FROM Expenses WHERE id=${categoryId}`
-    con.query(sql, (error, result) => {
-        if(error){
-            res.json({message : error.sqlMessage})
-        }else{
-            res.json({message : `Expense with ${categoryId} id deleted`})
-        }
-    })
+    const query = {id:categoryId}
+    db.Expenses.destroy({where : query})
+        .then(result => {
+            console.log(result)
+            result
+            ? res.status(200).json({message : `Expense deleted successfully`})
+            : res.status(404).json({message : `Expenses does not exist`})
+        })
+        .catch(err => {
+            next(err)
+        })
 }

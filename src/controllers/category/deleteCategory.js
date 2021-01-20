@@ -1,20 +1,24 @@
-import { con } from "../../config/dbConnection"
+import db from '../../models'
 
-export const deleteCategory = (req, res) => {
+export const deleteCategory = (req, res, next) => {
     const categoryId = req.params.id
-    const sql=`DELETE FROM Categories WHERE id=${categoryId}`
-    con.query(sql, (error, result) => {
-        if(error){
-            switch (error.errno) {
+    const query = {id:categoryId}
+
+    db.Categories.destroy({where : query})
+        .then(result => {
+            result 
+            ? res.status(200).json({message : `Category with ${categoryId} id deleted`})
+            : res.status(404).json({message : `Expenses does not exist`})
+        })
+        .catch(err => {
+            switch (err.parent.errno) {
                 case 1451:
-                    res.json({message : "Can not delete this category because it is referenced to"})
+                    res.status(205).json({message : "Can not delete this category because it is referenced to"})
                     break;
                 default:
-                    res.json(error.sqlMessage)
+                    next(err)
                     break;
             }
-        }else{
-            res.json({message : `Category with ${categoryId} id deleted`})
-        }
-    })
+            
+        })
 }

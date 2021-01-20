@@ -1,17 +1,15 @@
 import { con } from "../../config/dbConnection"
+import db from '../../models'
 import BadRequestError from "../../utils/badRequest"
 
 export const updateCategory = (req, res) => {
     const categoryId = req.params.id
     const newCategoryName = req.body.name
-    const sql = `UPDATE Categories SET name='${newCategoryName}' WHERE id='${categoryId}'`
-    con.query(sql, (error, result) => {
-        if(error){
-            throw new BadRequestError(error.sqlMessage)
-        }else{
-            console.log(result.affectedRows)
-            res.json(result.affectedRows ? {message : `Category updated to ${newCategoryName}`} : {message: 'id does not exist'})
-        }
-        
-    })
+    db.Categories.update({name:newCategoryName}, {where: {id:categoryId}})
+        .then(result => {
+            res.status(200).json(result[0] ? {message : `Category updated to ${newCategoryName}`} : {message: 'No change or id does not exist'})
+        })
+        .catch(err => {
+            throw new BadRequestError(err)
+        })
 }
