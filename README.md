@@ -1,5 +1,4 @@
 # expense-tracker-mvend
-<<<<<<< HEAD
 A restApi project for expense tracking system.
 
 **Running the codes**
@@ -34,6 +33,3 @@ To make any request to one of these endpoint you must pass api_key to the reques
 - view expense : GET [/expense/:id]()
 - update expense : PATCH [/expense/:id]()
 - delete expense : DELETE [/expense/:id]()
-=======
-A restApi project for expense tracking
->>>>>>> 448c740... Create README.md
