@@ -8,7 +8,7 @@ const authanticate = async (req, res, next) => {
     if (Date.now() >= exp * 1000) return res.status(401).json({ status: 401, message: 'You are not logged in' });
     return next();
   }catch(err){
-    res.json({message: 'invalid token'})
+    res.status(403).json({message: 'invalid token'})
   }
   
 };
