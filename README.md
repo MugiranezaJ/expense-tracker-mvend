@@ -1,6 +1,7 @@
 # expense-tracker-mvend
 A restApi project for expense tracking system.
 
+
 **Running the codes**
 
 Create database and create ```.env``` file. 
@@ -24,6 +25,11 @@ To make any request to one of these endpoint you must pass api_key to the reques
 
 **Categories**
 - create categories : POST [/expense/category/]()
+
+### Endpoints
+**Categories**
+- create categories : POST @ [/expense/category/]()
+
 - view categories : GET [/expense/category/]()
 - view categories : GET [/expense/category/]()
 - update categories : PATCH [/expense/category/:id]()
