@@ -1,10 +1,12 @@
-import { con } from "../../config/dbConnection"
+import db from '../../models'
 
-export const createCategory = (req, res) => {
+export const createCategory = (req, res, next) => {
     const categoryName = req.body.name
-    const sql = `INSERT INTO Categories(name) VALUES ('${categoryName}')`
-    con.query(sql, (err, result) => {
-        if (err) throw err
-        res.json({message : `Category ${categoryName} created`})
-    })
+    db.Categories.create(req.body)
+        .then(data => {
+            res.status(201).json({message : `Category ${categoryName} created`})
+        })
+        .catch(err => {
+            next(err.errors[0])
+        })
 }
